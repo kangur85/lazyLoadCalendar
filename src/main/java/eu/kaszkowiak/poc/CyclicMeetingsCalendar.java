@@ -9,11 +9,11 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class CyclicMeetingsCalendar implements Iterable<LocalDate> {
 
-    private final @Getter LocalDate date;
+    private final @Getter LocalDate startDate;
 
     @Override
     public Iterator<LocalDate> iterator() {
-        return new CyclicMeetingsCalendarIterator(date);
+        return new CyclicMeetingsCalendarIterator(startDate);
     }
 
     private class CyclicMeetingsCalendarIterator implements Iterator<LocalDate> {

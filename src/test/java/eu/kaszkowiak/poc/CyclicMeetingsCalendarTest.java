@@ -32,10 +32,26 @@ class CyclicMeetingsCalendarTest {
 
     @Test
     void shouldGetNextForAnyDate() {
-        Iterator<LocalDate> calendar = new CyclicMeetingsCalendar(LocalDate.now()).iterator();
-        LocalDate nextDate = calendar.next();
-        assertNotNull(nextDate);
-        assertTrue(nextDate.isBefore(calendar.next()));
+        CyclicMeetingsCalendar calendar = new CyclicMeetingsCalendar(LocalDate.now());
+        Iterator<LocalDate> calendarIterator = calendar.iterator();
+        LocalDate currentDate = calendar.getStartDate();
+        assertNotNull(currentDate);
+        LocalDate nextDate = calendarIterator.next();
+        assertTrue(currentDate.isBefore(nextDate));
+        assertTrue(calendarIterator.hasNext());
+    }
+
+    @Test
+    void shouldHaveDifferentIterators() {
+        CyclicMeetingsCalendar calendar = new CyclicMeetingsCalendar(LocalDate.of(2017,1,1));
+        Iterator<LocalDate> iterator1 = calendar.iterator();
+        Iterator<LocalDate> iterator2 = calendar.iterator();
+        iterator1.next();
+        iterator1.next();
+        LocalDate date2 = iterator2.next();
+        LocalDate date1 = iterator1.next();
+        assertEquals(LocalDate.of(2017,1,10), date1);
+        assertEquals(LocalDate.of(2017,1,3), date2);
     }
 
 }
