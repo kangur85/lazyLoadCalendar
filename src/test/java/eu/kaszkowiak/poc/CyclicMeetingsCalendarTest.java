@@ -6,20 +6,21 @@ import java.time.LocalDate;
 import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 class CyclicMeetingsCalendarTest {
 
     @Test
     void shouldGetDate() {
         Iterator<LocalDate> calendar = new CyclicMeetingsCalendar(LocalDate.of(2016, 9, 16)).iterator();
-        assertNotNull(calendar);
+        assertThat(calendar).isNotNull();
     }
 
     @Test
     void shouldGetTuesday() {
         Iterator<LocalDate> calendar = new CyclicMeetingsCalendar(LocalDate.of(2016, 9, 19)).iterator();
         LocalDate tuesday = LocalDate.of(2016, 9, 20);
-        assertEquals(tuesday, calendar.next());
+        assertThat(calendar.next()).isEqualTo(tuesday);
     }
 
     @Test
@@ -27,7 +28,7 @@ class CyclicMeetingsCalendarTest {
         Iterator<LocalDate> calendar = new CyclicMeetingsCalendar(LocalDate.of(2016, 9, 19)).iterator();
         LocalDate thursday = LocalDate.of(2016, 9, 22);
         calendar.next();
-        assertEquals(thursday, calendar.next());
+        assertThat(calendar.next()).isEqualTo(thursday);
     }
 
     @Test
@@ -35,10 +36,11 @@ class CyclicMeetingsCalendarTest {
         CyclicMeetingsCalendar calendar = new CyclicMeetingsCalendar(LocalDate.now());
         Iterator<LocalDate> calendarIterator = calendar.iterator();
         LocalDate currentDate = calendar.getStartDate();
-        assertNotNull(currentDate);
+        assertThat(currentDate).isNotNull();
+
         LocalDate nextDate = calendarIterator.next();
-        assertTrue(currentDate.isBefore(nextDate));
-        assertTrue(calendarIterator.hasNext());
+        assertThat(currentDate).isBefore(nextDate);
+        assertThat(calendarIterator.hasNext()).isTrue();
     }
 
     @Test

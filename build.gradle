@@ -8,6 +8,7 @@ buildscript {
 }
 
 apply plugin: 'java'
+apply plugin: 'idea'
 
 jar {
 	baseName = 'lazyLoadCalendar'
@@ -22,6 +23,6 @@ repositories {
 
 dependencies {
 	compileOnly "org.projectlombok:lombok:1.16.12"
-	compile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.0.0-M3'
-	testCompile group: 'org.assertj', name: 'assertj-core-java8', version: '1.0.0m1'
+	testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.0.0-M3'
+    compile 'org.assertj:assertj-core:3.6.1'
 }
