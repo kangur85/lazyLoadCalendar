@@ -1,0 +1,26 @@
+buildscript {
+	ext {
+		springBootVersion = '1.4.3.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+}
+
+apply plugin: 'java'
+
+jar {
+	baseName = 'lazyLoadCalendar'
+	version = '0.0.1-SNAPSHOT'
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compileOnly "org.projectlombok:lombok:1.16.12"
+	compile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.0.0-M3'
+}
