@@ -8,6 +8,7 @@ buildscript {
 }
 
 apply plugin: 'java'
+apply plugin: "jacoco"
 apply plugin: 'idea'
 
 jar {
@@ -17,12 +18,51 @@ jar {
 
 sourceCompatibility = 1.8
 
+jacoco {
+	toolVersion = "0.7.8"
+	reportsDir = file("$buildDir/reports/jacoco")
+}
+
+configurations { codacy }
+
 repositories {
 	mavenCentral()
+	maven { url "https://jitpack.io" }
+	maven { url "http://dl.bintray.com/typesafe/maven-releases" }
 }
 
 dependencies {
 	compileOnly "org.projectlombok:lombok:1.16.12"
 	testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.0.0-M3'
     compile 'org.assertj:assertj-core:3.6.1'
+	codacy 'com.github.codacy:codacy-coverage-reporter:-SNAPSHOT'
+}
+
+task sendCoverageToCodacy(type: JavaExec, dependsOn: jacocoTestReport) {
+	main = "com.codacy.CodacyCoverageReporter"
+	classpath = configurations.codacy
+	args = [
+			"-l",
+			"Java",
+			"-r",
+			"${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+	]
+}
+
+jacocoTestReport {
+	group = "Reporting"
+	reports {
+		xml.enabled = true
+		html.enabled = true
+	}
+}
+
+check.dependsOn jacocoTestReport
+
+test {
+	jacoco {
+		append = false
+		destinationFile = file("$buildDir/jacoco/jacocoTest.exec")
+		classDumpFile = file("$buildDir/jacoco/classpathdumps")
+	}
 }
