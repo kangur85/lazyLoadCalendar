@@ -1,8 +1,5 @@
 language: java
 
-env:
-    - CODACY_PROJECT_TOKEN=522de08e1df1496d9988ce166c82fa10
-
 jdk:
       - oraclejdk8
 

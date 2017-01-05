@@ -1,15 +1,23 @@
 buildscript {
-	ext {
-		springBootVersion = '1.4.3.RELEASE'
-	}
 	repositories {
 		mavenCentral()
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
+		dependencies {
+			classpath "net.saliman:gradle-cobertura-plugin:2.4.0"
+		}
 	}
 }
 
+apply plugin: "net.saliman.cobertura"
 apply plugin: 'java'
-apply plugin: "jacoco"
 apply plugin: 'idea'
+
+
+check.dependsOn 'cobertura'
+
+configurations { codacy }
 
 jar {
 	baseName = 'lazyLoadCalendar'
@@ -18,51 +26,33 @@ jar {
 
 sourceCompatibility = 1.8
 
-jacoco {
-	toolVersion = "0.7.8"
-	reportsDir = file("$buildDir/reports/jacoco")
-}
-
-configurations { codacy }
-
 repositories {
 	mavenCentral()
 	maven { url "https://jitpack.io" }
 	maven { url "http://dl.bintray.com/typesafe/maven-releases" }
 }
 
+
 dependencies {
 	compileOnly "org.projectlombok:lombok:1.16.12"
 	testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.0.0-M3'
     compile 'org.assertj:assertj-core:3.6.1'
 	codacy 'com.github.codacy:codacy-coverage-reporter:-SNAPSHOT'
+	testRuntime "org.slf4j:slf4j-api:1.7.10"
 }
 
-task sendCoverageToCodacy(type: JavaExec, dependsOn: jacocoTestReport) {
+cobertura {
+	coverageFormats = ['html', 'xml']
+}
+
+
+task sendCoverageToCodacy(type: JavaExec, dependsOn: coberturaCheck) {
 	main = "com.codacy.CodacyCoverageReporter"
 	classpath = configurations.codacy
 	args = [
 			"-l",
 			"Java",
 			"-r",
-			"${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+			"${buildDir}/reports/cobertura/coverage.xml"
 	]
-}
-
-jacocoTestReport {
-	group = "Reporting"
-	reports {
-		xml.enabled = true
-		html.enabled = true
-	}
-}
-
-check.dependsOn jacocoTestReport
-
-test {
-	jacoco {
-		append = false
-		destinationFile = file("$buildDir/jacoco/jacocoTest.exec")
-		classDumpFile = file("$buildDir/jacoco/classpathdumps")
-	}
 }
