@@ -11,20 +11,20 @@ import static org.assertj.core.api.Assertions.*;
 class CyclicMeetingsCalendarTest {
 
     @Test
-    void shouldGetDate() {
+    public void shouldGetDate() {
         Iterator<LocalDate> calendar = new CyclicMeetingsCalendar(LocalDate.of(2016, 9, 16)).iterator();
         assertThat(calendar).isNotNull();
     }
 
     @Test
-    void shouldGetTuesday() {
+    public void shouldGetTuesday() {
         Iterator<LocalDate> calendar = new CyclicMeetingsCalendar(LocalDate.of(2016, 9, 19)).iterator();
         LocalDate tuesday = LocalDate.of(2016, 9, 20);
         assertThat(calendar.next()).isEqualTo(tuesday);
     }
 
     @Test
-    void shouldGetThursday() {
+    public void shouldGetThursday() {
         Iterator<LocalDate> calendar = new CyclicMeetingsCalendar(LocalDate.of(2016, 9, 19)).iterator();
         LocalDate thursday = LocalDate.of(2016, 9, 22);
         calendar.next();
@@ -32,7 +32,7 @@ class CyclicMeetingsCalendarTest {
     }
 
     @Test
-    void shouldGetNextForAnyDate() {
+    public void shouldGetNextForAnyDate() {
         CyclicMeetingsCalendar calendar = new CyclicMeetingsCalendar(LocalDate.now());
         Iterator<LocalDate> calendarIterator = calendar.iterator();
         LocalDate currentDate = calendar.getStartDate();
@@ -44,7 +44,7 @@ class CyclicMeetingsCalendarTest {
     }
 
     @Test
-    void shouldHaveDifferentIterators() {
+    public void shouldHaveDifferentIterators() {
         CyclicMeetingsCalendar calendar = new CyclicMeetingsCalendar(LocalDate.of(2017,1,1));
         Iterator<LocalDate> iterator1 = calendar.iterator();
         Iterator<LocalDate> iterator2 = calendar.iterator();
